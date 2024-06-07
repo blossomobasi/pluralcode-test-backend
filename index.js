@@ -2,57 +2,37 @@ const dotenv = require("dotenv");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
-const Stripe = require("stripe");
-const app = express();
-
 dotenv.config({ path: "./config.env" });
 
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-console.log(app.get("env"));
+const signupRouter = require("./routes/signupRoutes");
+const loginRouter = require("./routes/loginRoutes");
+const stripeRouter = require("./routes/stripeRoutes");
+
+const app = express();
 
 const corsOptions = {
-  origin: process.env.FRONTEND_BASE_URL,
-  optionsSuccessStatus: 200,
+    origin: process.env.FRONTEND_BASE_URL,
+    optionsSuccessStatus: 200,
 };
 
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use("/api/signup", signupRouter);
+app.use("/api/login", loginRouter);
+app.use("/checkout", stripeRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+    res.send("Hello World!");
 });
 
-app.post("/checkout", async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: req.body.productTitle,
-            },
-            unit_amount: req.body.productPrice * 100,
-          },
-          quantity: req.body.quantity,
-        },
-      ],
-      mode: "payment",
-      success_url: `${process.env.FRONTEND_BASE_URL}/success`,
-      cancel_url: `${process.env.FRONTEND_BASE_URL}/cancel`,
-    });
-
-    res.json({ id: session.id, url: session.url });
-  } catch (err) {
-    console.error("Error creating stripe checkout session: ", err);
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.route("/api/signup").get(getAllUsers).post(signUp);
+// app.route("/api/signup/:id").put(updateUser).delete(deleteUser);
+// app.route("/checkout").post(stripePayment);
+// app.route("/api/login").post(login);
 
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}...`);
+    console.log(`Server is running on port ${port}...`);
 });
