@@ -1,10 +1,7 @@
-const dotenv = require("dotenv");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
-
-dotenv.config({ path: "./config.env" });
 
 const signupRouter = require("./routes/signupRoutes");
 const loginRouter = require("./routes/loginRoutes");
@@ -32,13 +29,4 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
-// app.route("/api/signup").get(getAllUsers).post(signUp);
-// app.route("/api/signup/:id").put(updateUser).delete(deleteUser);
-// app.route("/checkout").post(stripePayment);
-// app.route("/api/login").post(login);
-
-const port = process.env.PORT || 5000;
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}...`);
-});
+module.exports = app;
