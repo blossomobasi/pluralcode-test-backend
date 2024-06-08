@@ -2,6 +2,8 @@ const dotenv = require("dotenv");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const morgan = require("morgan");
+
 dotenv.config({ path: "./config.env" });
 
 const signupRouter = require("./routes/signupRoutes");
@@ -14,6 +16,10 @@ const corsOptions = {
     origin: process.env.FRONTEND_BASE_URL,
     optionsSuccessStatus: 200,
 };
+
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+}
 
 app.use(helmet());
 app.use(cors(corsOptions));
