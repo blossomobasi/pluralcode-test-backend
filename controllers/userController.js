@@ -9,6 +9,16 @@ const getAllUsers = async (req, res) => {
         res.status(500).json({ status: "failed", message: error.message });
     }
 };
+const getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        res.status(200).json({ status: "success", user });
+    } catch (error) {
+        res.status(500).json({ status: "failed", message: error.message });
+    }
+};
+
 const createUser = async (req, res) => {
     if (!req.body) return res.status(400).json({ message: "Please provide user details" });
 
@@ -50,6 +60,7 @@ const deleteUser = (req, res) => {
 // Export all at once
 module.exports = {
     getAllUsers,
+    getUserById,
     createUser,
     updateUser,
     deleteUser,
