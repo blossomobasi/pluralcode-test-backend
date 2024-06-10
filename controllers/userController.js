@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 
-const getAllUsers = catchAsync(async (req, res, next) => {
+const getAllUsers = catchAsync(async (req, res) => {
     const users = await User.find();
 
     res.status(200).json({ status: "success", result: users.length, users });
@@ -16,7 +16,7 @@ const getUserById = catchAsync(async (req, res, next) => {
     res.status(200).json({ status: "success", user });
 });
 
-const createUser = catchAsync(async (req, res, next) => {
+const createUser = catchAsync(async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
     const user = await User.create({
         firstName,

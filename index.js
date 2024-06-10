@@ -6,7 +6,6 @@ const cors = require("cors");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 const userRouter = require("./routes/userRoutes");
-const loginRouter = require("./routes/loginRoutes");
 const stripeRouter = require("./routes/stripeRoutes");
 
 const app = express();
@@ -27,7 +26,6 @@ app.use(express.json());
 
 // Routes
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/login", loginRouter);
 app.use("/checkout", stripeRouter);
 
 // Default route
