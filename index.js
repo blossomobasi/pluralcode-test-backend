@@ -1,6 +1,8 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const globalErrorHandler = require("./controllers/errorController");
+const AppError = require("./utils/appError");
 
 const userRouter = require("./routes/userRoutes");
 const loginRouter = require("./routes/loginRoutes");
@@ -26,8 +28,10 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use("*", (req, res) => {
-    res.status(404).json({ status: "failed", message: "Route not found" });
+app.all("*", (req, res, next) => {
+    next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+app.use(globalErrorHandler);
 
 module.exports = app;
