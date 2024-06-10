@@ -26,8 +26,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes
-app.use("/api/signup", userRouter);
-app.use("/api/login", loginRouter);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/login", loginRouter);
 app.use("/checkout", stripeRouter);
 
 // Default route
