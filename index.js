@@ -1,14 +1,19 @@
 const express = require("express");
+const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const globalErrorHandler = require("./controllers/errorController");
-const AppError = require("./utils/appError");
 
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorController");
 const userRouter = require("./routes/userRoutes");
 const loginRouter = require("./routes/loginRoutes");
 const stripeRouter = require("./routes/stripeRoutes");
 
 const app = express();
+
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+}
 
 const corsOptions = {
     origin: process.env.FRONTEND_BASE_URL,

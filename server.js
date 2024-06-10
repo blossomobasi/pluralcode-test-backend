@@ -1,13 +1,8 @@
-const app = require("./index");
 const mongoose = require("mongoose");
-const morgan = require("morgan");
 const dotenv = require("dotenv");
-
 dotenv.config({ path: "./config.env" });
 
-if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
-}
+const app = require("./index");
 
 const DB = process.env.DATABASE_URL.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
