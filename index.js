@@ -1,6 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const mongoSanitizer = require("express-mongo-sanitize");
+const xss = require("xss-clean");
 const cors = require("cors");
 
 const AppError = require("./utils/appError");
@@ -23,6 +25,12 @@ const corsOptions = {
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitizer());
+
+// Data sanitization against XSS
+app.use(xss());
 
 // Routes
 app.use("/api/v1/users", userRouter);
