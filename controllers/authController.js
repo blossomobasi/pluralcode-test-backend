@@ -9,6 +9,18 @@ const signToken = (id) => {
     });
 };
 
+const createSendToken = (user, res, statusCode) => {
+    const token = signToken(user._id);
+
+    res.status(statusCode).json({
+        status: "success",
+        token,
+        data: {
+            user,
+        },
+    });
+};
+
 exports.signup = catchAsync(async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
@@ -19,32 +31,24 @@ exports.signup = catchAsync(async (req, res) => {
         password,
     });
 
-    const token = signToken(newUser._id);
-
-    res.status(201).json({
-        status: "success",
-        token,
-        data: {
-            newUser,
-        },
-    });
+    createSendToken(newUser, res, 201);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
+    // 1) Check if there is an email and password
     if (!email || !password) {
         return next(new AppError("Please provide email and password!", 400));
     }
 
+    // 2) Get the user
     const user = await User.findOne({ email }).select("+password");
 
+    // 3) Check if the user exists and if the password is correct
     if (!user || !(await user.correctPassword(password, user.password)))
         return next(new AppError("Incorrect email or password", 401));
 
-    const token = signToken(user._id);
-    res.status(200).json({
-        status: "success",
-        token,
-    });
+    // 4) Create a token for the user
+    createSendToken(user, res, 200);
 });
