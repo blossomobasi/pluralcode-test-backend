@@ -17,7 +17,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const corsOptions = {
-    origin: process.env.NODE_ENV === "production" ? process.env.FRONTEND_BASE_URL : "*",
+    origin:
+        process.env.NODE_ENV === "production"
+            ? [process.env.FRONTEND_BASE_URL, "http://localhost:3000"]
+            : "*",
     optionsSuccessStatus: 200,
 };
 
