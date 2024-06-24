@@ -57,7 +57,7 @@ const deleteUser = catchAsync(async (req, res, next) => {
     res.status(204).json({ status: "success", data: null });
 });
 
-const getMe = catchAsync(async (req, res, next) => {
+const getMe = catchAsync(async (req, res) => {
     const user = await User.findById(req.user.id);
 
     res.status(200).json({
